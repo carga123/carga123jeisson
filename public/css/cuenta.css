@@ -1,0 +1,41 @@
+.posts{
+    margin-top:5px;
+    background-color: #fff ;
+    margin-top:5%;
+    padding:20px;
+    background-position: center center;
+}
+.contenido{
+    display:grid;
+    grid-template-columns: 2fr 1fr;
+    grid-gap:5%;
+}
+
+.posts img{
+    display:block;
+    margin:auto;
+    height: 200px;
+    width: 100%;
+    background-color:rgba(6, 112, 208, 0.2);
+}
+.newPost{
+float:right;
+}
+
+.texto{
+    width:700px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.bntDelete{
+    background-color: red;
+    border:solid red;
+}
+
+@media only screen and (max-width: 700px) {
+    .contenido{
+        display:grid;
+        grid-template-columns: 1fr;
+    }
+}
