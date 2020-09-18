@@ -26,14 +26,23 @@
             {{ csrf_field() }}
           <label for="exampleInputEmail1">Titulo</label>
           <input type="text" class="form-control"  name="title" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Titulo del Blog">
+          @error('title')
+          <div class="alert alert-danger">{{ $message }}</div>
+          @enderror
         </div>
         <div class="form-group">
           <label for="exampleInputPassword1">Contenido del Blog</label>
           <textarea type="text" name="content" class="form-control" id="exampleInputPassword1" placeholder="Contenido"></textarea>
+          @error('content')
+          <div class="alert alert-danger">{{ $message }}</div>
+          @enderror
         </div>
         <div class="form-group">
           <label for="ejemplo_archivo_1">Adjuntar un imagen</label>
           <input type="file" id="ejemplo_archivo_1" name="url_img">
+          @error('url_img')
+          <div class="alert alert-danger">{{ $message }}</div>
+          @enderror
         </div>
         <button type="submit" class="btn btn-primary">Crear Blog</button>
       </form>

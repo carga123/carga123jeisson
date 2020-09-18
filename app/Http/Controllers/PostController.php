@@ -42,6 +42,8 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request,['title'=>'required','content' => 'required','url_img'=>'required']);
+
         $post = new Post($request->all());
         $id = auth()->user()->id;
         $post->user_id = $id;
@@ -67,7 +69,6 @@ class PostController extends Controller
     public function show($id)
     {
     $post= Post::findOrFail($id);
-
     return view('post', compact('post'));
     }
 
@@ -93,13 +94,14 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $blog = Post::findOrFail($id);
-        $blog ->title= $request->title;
-        $blog ->content= $request->input('content');
-        $blog ->url_img= $request->input('url_img');
+        $this->validate($request,['title'=>'required','content' => 'required','url_img'=>'required']);
 
+        $post = Post::findOrFail($id);
+        $post->title = request()->title;
+        $post->content = request()->content;
+        $post->url_img = $request->file('url_img')->store('images','public');
 
-        $blog->save();
+        $post->save();
 
         return redirect('/account');
     }

@@ -18,6 +18,13 @@
     width: 100%;
     background-color:rgba(6, 112, 208, 0.2);
 }
+.posts video{
+    display:block;
+    margin:auto;
+    height: 200px;
+    width: 100%;
+    background-color:rgba(6, 112, 208, 0.2);
+}
 .newPost{
 float:right;
 }

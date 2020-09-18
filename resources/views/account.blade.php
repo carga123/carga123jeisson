@@ -25,7 +25,15 @@
             </div>
 
             <div class="post">
-                <img src="{{$post->url_img}}" alt="{{$post->title}}">
+                @php 
+                $info = new SplFileInfo("$post->url_img");
+                $file = $info->getExtension();
+                @endphp
+                @if($file == "mp4")
+                <video id="image" src="{{ asset("$post->url_img") }}" autoplay muted loop></video>
+                @else
+                <img id="image" src="{{ asset("$post->url_img") }}" />
+                @endif
                 <p>Creado: {{$post->created_at->diffForHumans()}}</p>
                 <p>Ultima edición: {{$post->updated_at->diffForHumans()}}</p>
                 <h2>Mas opciones del post</h2>

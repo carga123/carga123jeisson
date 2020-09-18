@@ -37,14 +37,14 @@ class CommentController extends Controller
      */
     public function store(Request $request,$id)
     {
-        $user_id = auth()->user()->id;
-        $coment = new Comment();
-        $coment->user_id = $user_id;
-        $coment->post_id = $id;
-        $coment->user_name = auth()->user()->name;
-        $coment ->comment= $request->coment;
-        $coment->save();
+        $this->validate($request,['comment'=>'required']);
+            $coment = new Comment;
+            $coment->user_id = auth()->user()->id;
+            $coment->user_name = auth()->user()->name;
+            $coment->post_id = $id;
+            $coment->comment = request()->comment;
 
+            $coment->save();
         return redirect()->back();
     }
 

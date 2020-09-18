@@ -14,12 +14,20 @@
 <body>
 {{-- post --}}
     <div id="container">
-    <img id="image" src="{{ asset("$post->url_img") }}" />
+        @php 
+        $info = new SplFileInfo("$post->url_img");
+        $file = $info->getExtension();
+        @endphp
+        @if($file == "mp4")
+        <video id="image" src="{{ asset("$post->url_img") }}" autoplay muted loop></video>
+        @else
+        <img id="image" src="{{ asset("$post->url_img") }}" />
+        @endif
+    
         <p id="text">
           {{$post->title}}
         </p>
    </div>
-
     <div class="container">
         <p>Creado: {{$post->created_at->diffForHumans()}} | Ultima Edición: {{$post->updated_at->diffForHumans()}}</p>
         <p>{{$post->content}}</p>
@@ -31,9 +39,13 @@
             @auth
         <form action="{{route("posts.comments.store",$post->id)}}" method="post" class="comentarios">
                 {{ csrf_field() }}
-                <textarea name="coment" class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Escribe aqui tu comentario"></textarea><br>
+                <textarea name="comment" class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Escribe aqui tu comentario"></textarea><br>
                 <button type="submit" class="btn btn-primary">Publicar <i class="fas fa-paper-plane"></i></button>
             </form>
+            @error('comment')
+            <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+
             @endauth
             @guest
             <h4>Para comentar por favor inicia sessión </h4><a class="btn btn-primary" href="/login">Iniciar Sessión</a>
@@ -51,11 +63,21 @@
                 @forelse ($post->likes as $like)
 
                 @if($like->comment_id == $comment->id)
-
                     @php $counter ++ @endphp
                         @auth
                         @if($like->user_id === auth()->user()->id)
-                            @php $button ++ @endphp
+                            @php 
+                            $counter --;
+                            $button ++ ;
+                            @endphp
+                                                @if($button > 0)
+                                                <form action="{{route('posts.comments.likes.destroy',[$post->id, $comment->id,$like->id])}}" method="post">
+                                                    @method('DELETE')
+                                                    {{ csrf_field() }}
+                                                    <button class="btn" style="color:#0074DC "><i class="far fa-thumbs-up"></i> Me Gusta</button>
+                                                </form>
+                                                @endif
+
                         @endif
                         @endauth
                 @endif
@@ -65,13 +87,7 @@
 
                    @endforelse
             @auth
-                @if($button > 0)
-                <form action="{{route('posts.comments.likes.destroy',[$post->id, $comment->id,$like->id])}}" method="post">
-                    @method('DELETE')
-                    {{ csrf_field() }}
-                    <button class="btn" style="color:#0074DC "><i class="far fa-thumbs-up"></i> Me Gusta</button>
-                </form>
-                @endif
+
                    @if($button === 0 )
                    <form action="{{route('posts.comments.likes.store',[$post->id, $comment->id])}}" method="post">
                        {{ csrf_field() }}
@@ -90,7 +106,6 @@
                 </form>
                 @endif
                 @endauth
-
                     <p><b>Creado por:{{$comment->user_name}} {{$comment->created_at->diffForHumans()}}</b> | Ultima edición: {{$comment->updated_at->diffForHumans()}}</p>
                 </div>
             @empty
